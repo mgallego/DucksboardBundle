@@ -2,13 +2,17 @@
 
 namespace SFM\DucksboardBundle\Adapter;
 
+use SFM\DucksboardBundle\Adapter\Exception\DucksboardPushException;
+
 class WidgetHandler{
 
         protected $apiKey;
         private $pushApiPath = 'https://push.ducksboard.com/values/';
         private $pullApiPath = 'https://pull.ducksboard.com/values/';
+        protected $data;
         
-        public function push($data){
+        public function push(){
+                $data = $this->data;
                 foreach ($data as $widgetId => $widgetData){
                         $apiPath = $this->pushApiPath . $widgetId;
                         $retData = $this->callApi($apiPath, 'POST', json_encode($widgetData));
@@ -18,7 +22,7 @@ class WidgetHandler{
                                 }
                         }
                         catch(\ErrorException $e){
-                                die($retData);
+                                throw new DucksboardPushException($apiPath, $retData);
                         }
                 }
                 return true;

@@ -23,4 +23,16 @@ class Widget extends WidgetHandler{
                 $apiPath = $this->getPullApiPath() . $widgetId . "/timespan?timespam={$timespan}&timezone={$timezone}";
                 return json_decode($this->callApi($apiPath, 'GET'));
         }
+
+        public function setData($data){
+                $this->data = $data;
+        }
+
+        public function appendData($data){
+                $this->data +=  $data;
+        }
+
+        public function getData(){
+                return $this->data;
+        }
 }
