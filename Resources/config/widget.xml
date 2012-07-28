@@ -5,11 +5,11 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
   <parameters>
-      <parameter key="ducksboard_widget_handler.class">SFM\DucksboardBundle\Adapter\WidgetHandler</parameter>
+      <parameter key="ducksboard_widget.class">SFM\DucksboardBundle\Adapter\Widget</parameter>
   </parameters>
 
   <services>
-      <service id="sfm.ducksboard.widget_handler" class="%ducksboard_widget_handler.class%">
+      <service id="sfm.ducksboard.widget" class="%ducksboard_widget.class%">
       </service>
   </services>
 
