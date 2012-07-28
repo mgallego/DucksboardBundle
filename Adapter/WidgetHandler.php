@@ -13,19 +13,15 @@ class WidgetHandler{
 
         public function push($data){
                 foreach ($data as $widgetId => $widgetData){
-                        $ch = curl_init($this->pushApiPath.$widgetId);
-                        curl_setopt($ch, CURLOPT_USERPWD, $this->apiKey.":ignored");
-                        curl_setopt ($ch, CURLOPT_POSTFIELDS, json_encode($widgetData));
-                        curl_setopt ($ch, CURLOPT_POST, 1);
-                        curl_setopt ($ch,CURLOPT_RETURNTRANSFER,true);
-                        $retData = curl_exec ($ch);
-                        curl_close($ch);
+                        $apiPath = $this->pushApiPath . $widgetId;
+                        $retData = $this->callApi($apiPath, 'POST', json_encode($widgetData));
                         try{
-                        if (json_decode($retData)->response !== 'ok'){
-                                return false;
-                        }}
+                                if (json_decode($retData)->response !== 'ok'){
+                                        return false;
+                                }
+                        }
                         catch(\ErrorException $e){
-                                return false;
+                                die($retData);
                         }
                 }
                 return true;
@@ -42,5 +38,20 @@ class WidgetHandler{
                 return json_decode($data);
         }
 
+        private function callApi($apiPath, $method,  $inputData){
+                $ch = curl_init($apiPath);
+                curl_setopt($ch, CURLOPT_USERPWD, $this->apiKey.":ignored");
+                curl_setopt ($ch, CURLOPT_POSTFIELDS, $inputData);
+                if ($method === 'POST'){
+                        curl_setopt ($ch, CURLOPT_POST, 1);
+                }elseif ($method === 'GET'){
+                        curl_setopt ($ch, CURLOPT_POST, 0);
+                }
+                curl_setopt ($ch,CURLOPT_RETURNTRANSFER,true);
+                $outData = curl_exec ($ch);
+                curl_close($ch);
+
+                return $outData;
+        } 
 
 }
