@@ -24,15 +24,12 @@ class WidgetHandler{
                 return true;
         }
 
-        public function getLastValue($widgetId){
-                $apiPath = $this->pullApiPath . $widgetId . '/last/';
-                return json_decode($this->callApi($apiPath, 'GET'));
-        }
-
         public function callApi($apiPath, $method,  $inputData = null){ 
                 $ch = curl_init($apiPath);
                 curl_setopt($ch, CURLOPT_USERPWD, $this->apiKey.":ignored");
-                curl_setopt ($ch, CURLOPT_POSTFIELDS, $inputData);
+                if ($inputData){
+                        curl_setopt ($ch, CURLOPT_POSTFIELDS, $inputData);
+                }
                 if ($method === 'POST'){
                         curl_setopt ($ch, CURLOPT_POST, 1);
                 }elseif ($method === 'GET'){
@@ -56,7 +53,4 @@ class WidgetHandler{
         public function getPullApiPath(){
                 return $this->pullApiPath;
         }
-
-
-
 }
