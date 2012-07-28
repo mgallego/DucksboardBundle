@@ -38,7 +38,7 @@ class WidgetHandler{
                 return json_decode($data);
         }
 
-        private function callApi($apiPath, $method,  $inputData){
+        private function callApi($apiPath, $method,  $inputData = null){ 
                 $ch = curl_init($apiPath);
                 curl_setopt($ch, CURLOPT_USERPWD, $this->apiKey.":ignored");
                 curl_setopt ($ch, CURLOPT_POSTFIELDS, $inputData);
