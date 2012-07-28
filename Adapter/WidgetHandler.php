@@ -6,7 +6,8 @@ class WidgetHandler{
 
         protected $apiKey;
         private $pushApiPath = 'https://push.ducksboard.com/values/';
-
+        private $pullApiPath = 'https://pull.ducksboard.com/values/';
+        
         public function setApiKey($apiKey){
                 $this->apiKey = $apiKey;
         }
@@ -27,15 +28,9 @@ class WidgetHandler{
                 return true;
         }
 
-        public function getCountValue($widgetId){
-                $ch = curl_init('https://pull.ducksboard.com/values/'.$widgetId.'/last/');
-                curl_setopt($ch, CURLOPT_USERPWD, $this->apiKey.":ignored");
-                curl_setopt ($ch, CURLOPT_POST, 0);
-                curl_setopt ($ch, CURLOPT_HEADER, 0);
-                curl_setopt ($ch,CURLOPT_RETURNTRANSFER,true);
-                $data = curl_exec ($ch);
-                curl_close($ch);
-                return json_decode($data);
+        public function getLastValue($widgetId){
+                $apiPath = $this->pullApiPath . $widgetId . '/last/';
+                return json_decode($this->callApi($apiPath, 'GET'));
         }
 
         private function callApi($apiPath, $method,  $inputData = null){ 
