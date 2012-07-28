@@ -8,10 +8,6 @@ class WidgetHandler{
         private $pushApiPath = 'https://push.ducksboard.com/values/';
         private $pullApiPath = 'https://pull.ducksboard.com/values/';
         
-        public function setApiKey($apiKey){
-                $this->apiKey = $apiKey;
-        }
-
         public function push($data){
                 foreach ($data as $widgetId => $widgetData){
                         $apiPath = $this->pushApiPath . $widgetId;
@@ -33,7 +29,7 @@ class WidgetHandler{
                 return json_decode($this->callApi($apiPath, 'GET'));
         }
 
-        private function callApi($apiPath, $method,  $inputData = null){ 
+        public function callApi($apiPath, $method,  $inputData = null){ 
                 $ch = curl_init($apiPath);
                 curl_setopt($ch, CURLOPT_USERPWD, $this->apiKey.":ignored");
                 curl_setopt ($ch, CURLOPT_POSTFIELDS, $inputData);
@@ -48,5 +44,19 @@ class WidgetHandler{
 
                 return $outData;
         } 
+
+        public function setApiKey($apiKey){
+                $this->apiKey = $apiKey;
+        }
+
+        public function getPushApiPath(){
+                return $this->pushApiPath;
+        }
+
+        public function getPullApiPath(){
+                return $this->pullApiPath;
+        }
+
+
 
 }
