@@ -57,7 +57,7 @@ Now you can use your own service that set automatically the apikey
 
 ## Use the bundle service
 
-The service has a service prepared to use. Example:
+The bundle has a service prepared to use. Example:
 
 ```php
 $widget = $this->container->get('sfm.ducksboard.widget');
