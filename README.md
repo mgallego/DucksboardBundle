@@ -1,5 +1,7 @@
 # DucksboardBundle for Symfony2
 
+This bundle integrates Symfony2 applications with the Ducksboard API.
+
 ## Dependencies
 PHP Curl library http://php.net/manual/en/book.curl.php
 
