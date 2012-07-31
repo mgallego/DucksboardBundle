@@ -20,7 +20,7 @@ class Widget extends WidgetHandler{
         }
         
         public function findByTimespan($widgetId, $timespan, $timezone){
-                $apiPath = $this->getPullApiPath() . $widgetId . "/timespan?timespam={$timespan}&timezone={$timezone}";
+                $apiPath = $this->getPullApiPath() . $widgetId . "/timespan?timespan={$timespan}&timezone={$timezone}";
                 return json_decode($this->callApi($apiPath, 'GET'));
         }
 
