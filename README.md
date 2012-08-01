@@ -7,6 +7,33 @@ PHP Curl library http://php.net/manual/en/book.curl.php
 
 ## Instalation
 
+### With composer
+
+Add the project in the `composer.json` file:
+```json
+...
+"require": {
+...
+	"sfm/ducksboard-bundle": "dev-master"
+...
+}
+```
+
+and in the `AppKernel.php` file:
+```php
+	$bundles = array(
+        ...
+	    new SFM\DucksboardBundle\SFMDucksboardBundle(),
+	...
+        );
+```
+
+Execute 
+	php composer.phar install
+
+
+### With deps files
+
 Add the project in the `deps` file:
 
 ```php
