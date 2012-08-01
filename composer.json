@@ -1,5 +1,5 @@
 {
-    "name": "SFM/ducksboard-bundle",
+    "name": "sfm/ducksboard-bundle",
     "description": "Symfony2 Bundle to integrate an app with Ducksboard.",
     "keywords": ["symfony2", "ducksboard"],
     "type": "symfony-bundle",
