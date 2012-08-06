@@ -11,12 +11,12 @@ class Widget extends WidgetHandler{
                 if ($count){
                         $apiPath = $apiPath . "?count={$count}";
                 }
-                return json_decode($this->callApi($apiPath, 'GET'));
+		return $this->getSerializer()->decode($this->callApi($apiPath, 'GET'), 'json');
         }
 
         public function findBySeconds($widgetId, $seconds){
                 $apiPath = $this->getPullApiPath() . $widgetId . "/since?seconds={$seconds}";
-                return json_decode($this->callApi($apiPath, 'GET'));
+		return $this->getSerializer()->decode($this->callApi($apiPath, 'GET'), 'json');
         }
         
         public function findByTimespan($widgetId, $timespan, $timezone){
@@ -29,8 +29,8 @@ class Widget extends WidgetHandler{
             $currentValue = 0;
             $currentWidgetData = $this->getLastValues($widgetId, 1);
 
-            if ($currentWidgetData->data){
-                $currentValue = $currentWidgetData->data[0]->value;
+            if ($currentWidgetData['data']){
+                $currentValue = $currentWidgetData['data'][0]['value'];
             }
 
             $widgetData = array($widgetId => array('value' => $currentValue + 1 ));

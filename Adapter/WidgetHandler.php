@@ -15,9 +15,7 @@ class WidgetHandler{
     protected $data;
         
     public function push(){
-	$encoders = array('json' => new JsonEncoder());
-	$normalizers = array(new GetSetMethodNormalizer());
-	$serializer = new Serializer($normalizers, $encoders);
+	$serializer = $this->getSerializer();
 
 	$data = $this->data;
 	foreach ($data as $widgetId => $widgetData){
@@ -65,4 +63,12 @@ class WidgetHandler{
     public function getPullApiPath(){
 	return $this->pullApiPath;
     }
+
+    public function getSerializer(){
+	$encoders = array('json' => new JsonEncoder());
+	$normalizers = array(new GetSetMethodNormalizer());
+	return new Serializer($normalizers, $encoders);
+
+    }
+
 }
