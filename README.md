@@ -1,5 +1,7 @@
 # DucksboardBundle for Symfony2
 
+[![Build Status](https://secure.travis-ci.org/mgallego/DucksboardBundle.png?branch=master)](http://travis-ci.org/mgallego/DucksboardBundle)
+
 This bundle integrates Symfony2 applications with the Ducksboard API.
 
 ## Dependencies
