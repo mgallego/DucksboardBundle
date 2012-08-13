@@ -1,11 +1,20 @@
 <?php
 
+/**
+ * This file is part of the DucksboardBundle package.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ */
+
 namespace SFM\DucksboardBundle\Adapter;
 
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 use SFM\DucksboardBundle\Adapter\Exception\DucksboardPushException;
+use SFM\DucksboardBundle\Connection\Connector;
+
 
 class WidgetHandler{
 
@@ -14,43 +23,42 @@ class WidgetHandler{
     private $pullApiPath = 'https://pull.ducksboard.com/values/';
     protected $data;
         
+
+
     public function push(){
 	$serializer = $this->getSerializer();
-
 	$data = $this->data;
+	$response = array();
 	foreach ($data as $widgetId => $widgetData){
-	    $apiPath = $this->pushApiPath . $widgetId;
-	    $retData = $this->callApi($apiPath, 'POST', $serializer->serialize($widgetData, 'json'));
-	    $retResponse = $serializer->decode($retData, 'json');
 	    try{
-		if ($retResponse['response'] !== 'ok'){
-		    return false;
-		}
+		$apiPath = $this->pushApiPath . $widgetId;
+		$retData = $this->callApi($apiPath, 'POST', $serializer->serialize($widgetData, 'json'));
+		$response[] = $serializer->decode($retData, 'json');
 	    }
 	    catch(\ErrorException $e){
-		throw new DucksboardPushException($apiPath, $retData);
+		throw new DucksboardPushException($apiPath, $e);
 	    }
 	}
-	return true;
+	return $response;
     }
 
-    public function callApi($apiPath, $method,  $inputData = null){ 
-	$ch = curl_init($apiPath);
-	curl_setopt($ch, CURLOPT_USERPWD, $this->apiKey.":ignored");
-	if ($inputData){
-	    curl_setopt ($ch, CURLOPT_POSTFIELDS, $inputData);
-	}
-	if ($method === 'POST'){
-	    curl_setopt ($ch, CURLOPT_POST, 1);
-	}elseif ($method === 'GET'){
-	    curl_setopt ($ch, CURLOPT_POST, 0);
-	}
-	curl_setopt ($ch,CURLOPT_RETURNTRANSFER,true);
-	$outData = curl_exec ($ch);
-	curl_close($ch);
 
-	return $outData;
+
+    public function createConnector($apiPath, $method){
+	$connector = new Connector($apiPath, $this->apiKey);
+	$connector->setMethod($method);
+	return $connector;
+    }
+
+
+    public function callApi($apiPath, $method,  $inputData = null){ 
+	$connector = $this->createConnector($apiPath, $method);
+	$connector->setData($inputData);
+	$response = $connector->exec();
+	$connector->close();
+	return $response;
     } 
+
 
     public function setApiKey($apiKey){
 	$this->apiKey = $apiKey;
@@ -68,7 +76,6 @@ class WidgetHandler{
 	$encoders = array('json' => new JsonEncoder());
 	$normalizers = array(new GetSetMethodNormalizer());
 	return new Serializer($normalizers, $encoders);
-
     }
 
 }
