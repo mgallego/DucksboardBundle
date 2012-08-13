@@ -118,7 +118,7 @@
    <arg value="--log" />
    <arg path="${basedir}/build/logs" />
    <arg value="--source" />
-   <arg path="${basedir}/src" />
+   <arg path="${basedir}/" />
    <arg value="--output" />
    <arg path="${basedir}/build/code-browser" />
   </exec>
