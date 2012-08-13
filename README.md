@@ -134,6 +134,12 @@ $widget->setApiKey($this->container->getParameter('ducksboard_api'));
         $widget->setData($widgetGraphData);
         $widget->push();
 ```
+*Delta Values*
+        $widget	= $this->container->get('screencast.ducksboard');
+	$widgetData = array($widgetId => array('delta' => 1 ));
+	$widget->setData($widgetData);
+	$widget->push();
+	
 
 ### Pull method
 
