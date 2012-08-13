@@ -20,14 +20,12 @@ class WidgetHandlerTest extends \PHPUnit_Framework_TestCase
 	$this->assertEquals($this->widget->getApiPath('pull', $parameters), 'https://pull.ducksboard.com/values/2/last/?counter=1');
 
     }
-
     
     public function testGetRawResponse(){
 	$this->widget->setResponse('{"response": "ok"}');
 	$response = array('{"response": "ok"}');
 	$this->assertEquals($this->widget->getRawResponse(), $response); 
     }
-
 
     public function testGetArrayResponse(){
 	$widget = $this->getMockBuilder('SFM\DucksboardBundle\Adapter\WidgetHandler')

@@ -139,17 +139,28 @@ $widget->setApiKey($this->container->getParameter('ducksboard_api'));
 
 *Get the 3 last data of a widget*
 ```php
- $widgetActualData = $widget->getLastValues($widgetId, 3);
+   $widget->getLastValues($widgetId, 3);
+   $widgetActualData = $widget->getArrayResponse();		     
+   //or
+   $widgetActualData = $widget->getRawResponse();		     
+
 ```
 
 *Find data by seconds*
 ```php
- $widgetActualData = $widget->findBySeconds($widgetId, $seconds);
+   $widget->findBySeconds($widgetId, $seconds);
+   $widgetActualData = $widget->getArrayResponse();		     
+   //or
+   $widgetActualData = $widget->getRawResponse();		     
 ```
 
 *Find data by timespan*
 ```php
- $widgetActualData = $widget->findByTimespan($widgetId, 'monthly', $timezone);
+   $widget->findByTimespan($widgetId, 'monthly', $timezone);
+   $widgetActualData = $widget->getArrayResponse();		     
+   //or
+   $widgetActualData = $widget->getRawResponse();		     
+
 ```
 
 ## Other resources
