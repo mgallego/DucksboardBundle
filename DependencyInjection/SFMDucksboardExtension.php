@@ -13,6 +13,6 @@ class SFMDucksboardExtension extends Extension
     {
         // registering services
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('widget.xml');
+        $loader->load('services.xml');
     }
 }

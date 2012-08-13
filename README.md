@@ -77,6 +77,7 @@ services:
 ...
     example.ducksboard:
         class: SFM\DucksboardBundle\Adapter\Widget
+        arguments: [@sfm.ducksboard.connector]	
         calls:
             - [setApiKey, [%ducksboard_api%]]
 

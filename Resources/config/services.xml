@@ -6,11 +6,15 @@
 
   <parameters>
       <parameter key="ducksboard_widget.class">SFM\DucksboardBundle\Adapter\Widget</parameter>
+      <parameter key="ducksboard_connector.class">SFM\DucksboardBundle\Connection\Connector</parameter>
   </parameters>
 
   <services>
-      <service id="sfm.ducksboard.widget" class="%ducksboard_widget.class%">
-      </service>
+    <service id="sfm.ducksboard.connector" class="%ducksboard_connector.class%">
+    </service>
+    <service id="sfm.ducksboard.widget" class="%ducksboard_widget.class%">
+      <argument type="service" id="sfm.ducksboard.connector"/>
+    </service>
   </services>
-
+  
 </container>

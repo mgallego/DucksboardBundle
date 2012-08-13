@@ -15,14 +15,13 @@ class Connector
     protected $connector;
 
 
-    public function __construct($apiPath, $apiKey){
+    public function createConnector($apiPath, $apiKey){
 	$this->connector = curl_init($apiPath);
 	curl_setopt($this->connector, CURLOPT_USERPWD, $apiKey.":ignored");
 	curl_setopt ($this->connector,CURLOPT_RETURNTRANSFER,true);
     }
 
-
-
+    
     public function setMethod($method = 'POST'){
 	$methodKey = 1;
 

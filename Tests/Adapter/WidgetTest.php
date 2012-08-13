@@ -3,12 +3,13 @@
 namespace SFM\DucksboardBundle\Tests\Adapter;
 
 use SFM\DucksboardBundle\Adapter\Widget;
+use SFM\DucksboardBundle\Connection\Connector;
 
 class WidgetTest extends \PHPUnit_Framework_TestCase
 {
     
     public function testSetData(){
-	$widget = new Widget();
+	$widget = new Widget($connector = new Connector());
 	$data = array(1, array('value'=>1));
 	
 	$widget->setData($data);
@@ -16,7 +17,7 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
     }
 
     public function testAppendData(){
-	$widget = new Widget();
+	$widget = new Widget($connector = new Connector());
 	$dataOne = array(1, array('value'=>1));
 	$dataTwo = array(2, array('value'=>2));
 
