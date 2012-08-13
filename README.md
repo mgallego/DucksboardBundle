@@ -135,11 +135,12 @@ $widget->setApiKey($this->container->getParameter('ducksboard_api'));
         $widget->push();
 ```
 *Delta Values*
+```php
         $widget	= $this->container->get('screencast.ducksboard');
 	$widgetData = array($widgetId => array('delta' => 1 ));
 	$widget->setData($widgetData);
 	$widget->push();
-	
+```	
 
 ### Pull method
 
