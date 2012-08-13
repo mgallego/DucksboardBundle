@@ -37,7 +37,7 @@
 
  <target name="lint" description="Perform syntax check of sourcecode files">
   <apply executable="php" failonerror="true">
-   <arg value="-l"> />
+   <arg value="-l" />
 
    <fileset dir="${basedir}/">
     <include name="**/*.php" />
