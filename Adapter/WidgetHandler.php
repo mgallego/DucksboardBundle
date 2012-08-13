@@ -32,12 +32,10 @@ class WidgetHandler{
 
     public function push(){
 	$serializer = $this->getSerializer();
-	$data = $this->data;
 	$response = array();
-	foreach ($data as $widgetId => $widgetData){
+	foreach ($this->data as $widgetId => $widgetData){
 	    try{
-		$apiPath = $this->pushApiPath . $widgetId;
-		$retData = $this->callApi($apiPath, 'POST', $serializer->serialize($widgetData, 'json'));
+		$retData = $this->callApi($this->getApiPath('push', array($widgetId)), 'POST', $serializer->serialize($widgetData, 'json'));
 		$response[] = $serializer->decode($retData, 'json');
 	    }
 	    catch(\ErrorException $e){
@@ -47,15 +45,13 @@ class WidgetHandler{
 	return $response;
     }
 
-
-
-    public function createConnector($apiPath, $method){
+    
+    private function createConnector($apiPath, $method){
 	$connector = $this->connector;
 	$connector->createConnector($apiPath, $this->apiKey);
 	$connector->setMethod($method);
 	return $connector;
     }
-
 
 
     public function callApi($apiPath, $method,  $inputData = null){ 
@@ -66,27 +62,41 @@ class WidgetHandler{
     } 
 
 
-    public function sendData(&$connector, $data){
+    private function sendData(&$connector, $data){
 	$connector->setData($data);
 	return $connector->exec();
     }
+
 
     public function setApiKey($apiKey){
 	$this->apiKey = $apiKey;
     }
 
+
     public function getPushApiPath(){
 	return $this->pushApiPath;
     }
+
 
     public function getPullApiPath(){
 	return $this->pullApiPath;
     }
 
+
     public function getSerializer(){
 	$encoders = array('json' => new JsonEncoder());
 	$normalizers = array(new GetSetMethodNormalizer());
 	return new Serializer($normalizers, $encoders);
+    }
+
+
+    public function getApiPath($method = 'push', $parameters){
+	$path = "${method}ApiPath";
+	$apiPath =  $this->$path;
+	foreach ($parameters as $parameter){
+	    $apiPath .=  $parameter;
+	}
+	return $apiPath;
     }
 
 }
