@@ -2,7 +2,7 @@
 
 namespace SFM\DucksboardBundle\Tests\Adapter;
 
-class WidgetHanlderTest extends \PHPUnit_Framework_TestCase
+class WidgetHandlerTest extends \PHPUnit_Framework_TestCase
 {
     
     private $widget;
@@ -30,9 +30,17 @@ class WidgetHanlderTest extends \PHPUnit_Framework_TestCase
 
 
     public function testGetArrayResponse(){
-	$this->widget->setResponse('{"response": "ok"}');
+	$widget = $this->getMockBuilder('SFM\DucksboardBundle\Adapter\WidgetHandler')
+	    ->setMethods(array('getArrayResponse'))
+	    ->disableOriginalConstructor()->getMock();
+
+	$widget->expects($this->any())
+	    ->method('getArrayResponse')
+	    ->will($this->returnValue(array(array("response" => "ok"))));
+
+	$widget->setResponse('{"response": "ok"}');
 	$response = array(array("response" => "ok"));
-	$this->assertEquals($this->widget->getArrayResponse(), $response); 
+	$this->assertEquals($widget->getArrayResponse(), $response); 
 
     }
 
