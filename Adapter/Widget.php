@@ -6,47 +6,44 @@ use SFM\DucksboardBundle\Adapter\WidgetHandler;
 
 class Widget extends WidgetHandler{
 
-        public function getLastValues($widgetId, $count = null){
-                $apiPath = $this->getPullApiPath() . $widgetId . '/last/';
-                if ($count){
-                        $apiPath = $apiPath . "?count={$count}";
-                }
-		return $this->getSerializer()->decode($this->callApi($apiPath, 'GET'), 'json');
-        }
 
-        public function findBySeconds($widgetId, $seconds){
-                $apiPath = $this->getPullApiPath() . $widgetId . "/since?seconds={$seconds}";
-		return $this->getSerializer()->decode($this->callApi($apiPath, 'GET'), 'json');
-        }
+    public function getLastValues($widgetId, $count = 3){
+	$this->callApi($this->getApiPath('pull', array($widgetId, "/last/?count={$count}")),'GET');
+    }
+
+    public function findBySeconds($widgetId, $seconds){
+	$this->callApi($this->getApiPath('pull', array($widgetId, "/since?seconds={$seconds}")),'GET');
+    }
         
-        public function findByTimespan($widgetId, $timespan, $timezone){
-                $apiPath = $this->getPullApiPath() . $widgetId . "/timespan?timespan={$timespan}&timezone={$timezone}";
-                return json_decode($this->callApi($apiPath, 'GET'));
-        }
+    public function findByTimespan($widgetId, $timespan, $timezone){
+	$this->callApi($this->getApiPath('pull', array($widgetId, "/timespan?timespan={$timespan}&timezone={$timezone}" )),'GET');
+    }
 
-	public function addToCounter($widgetId)
-        {
-            $currentValue = 0;
-            $currentWidgetData = $this->getLastValues($widgetId, 1);
+    public function addToCounter($widgetId)
+    {
+	$currentValue = 0;
+	$this->getLastValues($widgetId, 1);
+	$currentWidgetData = $this->getArrayResponse();
+	
+	if ($currentWidgetData[0]['data']){
+	    $currentValue = $currentWidgetData[0]['data'][0]['value'];
+	}
 
-            if ($currentWidgetData['data']){
-                $currentValue = $currentWidgetData['data'][0]['value'];
-            }
+	$widgetData = array($widgetId => array('value' => $currentValue + 1 ));
+	$this->setData($widgetData);
+	$this->push();
+    }
 
-            $widgetData = array($widgetId => array('value' => $currentValue + 1 ));
-            $this->setData($widgetData);
-            $this->push();
-        }
 
-        public function setData($data){
-                $this->data = $data;
-        }
+    public function setData($data){
+	$this->data = $data;
+    }
 
-        public function appendData($data){
-                $this->data +=  $data;
-        }
+    public function appendData($data){
+	$this->data +=  $data;
+    }
 
-        public function getData(){
-                return $this->data;
-        }
+    public function getData(){
+	return $this->data;
+    }
 }

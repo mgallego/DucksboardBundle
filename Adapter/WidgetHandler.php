@@ -23,6 +23,9 @@ class WidgetHandler{
     private $pullApiPath = 'https://pull.ducksboard.com/values/';
     protected $data;
     protected $connector;
+    protected $response;
+    private $exitFormat = 'json';
+    private $inputFormat = 'json';
 
 
     public function __construct(Connector $connector){
@@ -35,14 +38,12 @@ class WidgetHandler{
 	$response = array();
 	foreach ($this->data as $widgetId => $widgetData){
 	    try{
-		$retData = $this->callApi($this->getApiPath('push', array($widgetId)), 'POST', $serializer->serialize($widgetData, 'json'));
-		$response[] = $serializer->decode($retData, 'json');
+		$this->callApi($this->getApiPath('push', array($widgetId)), 'POST', $serializer->serialize($widgetData, $this->inputFormat));
 	    }
 	    catch(\ErrorException $e){
-		throw new DucksboardPushException($apiPath, $e);
+		throw new DucksboardPushException($this->getApiPath('push', array($widgetId)),  $e);
 	    }
 	}
-	return $response;
     }
 
     
@@ -56,9 +57,8 @@ class WidgetHandler{
 
     public function callApi($apiPath, $method,  $inputData = null){ 
 	$connector = $this->createConnector($apiPath, $method);
-	$response = $this->sendData($connector, $inputData);
+	$this->setResponse($this->sendData($connector, $inputData));
 	$connector->close();
-	return $response;
     } 
 
 
@@ -97,6 +97,30 @@ class WidgetHandler{
 	    $apiPath .=  $parameter;
 	}
 	return $apiPath;
+    }
+
+
+    public function getRawResponse(){
+	return $this->response;
+    }
+
+
+    public function getArrayResponse(){
+	$arrayResponse = array();
+	foreach ($this->response as $response){
+	    $arrayResponse[] =  $this->getSerializer()->decode($response, $this->exitFormat);
+	}
+	return $arrayResponse;
+    }
+
+    
+    public function clearResponse(){
+	unset($this->response);
+   }
+
+
+    public function setResponse($response){
+	$this->response[] = $response;
     }
 
 }
